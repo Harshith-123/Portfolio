@@ -4,25 +4,38 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Harshith Basavaraju | Data Engineer | Software Developer</title>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RD9VTNLZ8G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-RD9VTNLZ8G');
+  </script>
   <link rel="icon" type="image/png" href="fevicon.png" />
   <link rel="stylesheet" href="style_final_v2.css" />
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 </head>
 <body>
   <div class="page-shell">
-    <header class="top-strip">
+    <!-- Fixed atmospheric cloud background — visible through all transparent sections -->
+    <div class="page-bg" aria-hidden="true"></div>
+
+    <header class="top-strip ts-over-video">
       <span></span>
     </header>
 
-    <nav class="navbar" id="navbar">
+    <nav class="navbar nav-over-video" id="navbar">
       <a href="#home" class="brand">Harshith Basavaraju</a>
       <div class="nav-center">
         <a href="#home">Home</a>
         <a href="#about">About</a>
         <a href="#skills">What I Build</a>
-        <a href="#projects">Systems I've Built</a>
+        <a href="#projects">Projects</a>
         <a href="#experience">Experience</a>
+        <a href="#education">Education</a>
+        <a href="#certifications">Certifications</a>
         <a href="#contact">Contact</a>
       </div>
       <button class="menu-btn" id="menuBtn" aria-label="Open menu">
@@ -34,35 +47,75 @@
       <a href="#home">Home</a>
       <a href="#about">About</a>
       <a href="#skills">What I Build</a>
-      <a href="#projects">Systems I've Built</a>
+      <a href="#projects">Projects</a>
       <a href="#experience">Experience</a>
+      <a href="#education">Education</a>
+      <a href="#certifications">Certifications</a>
       <a href="#contact">Contact</a>
     </div>
 
     <main>
-      <section id="home" class="hero section-banner hero-banner">
-        <div class="banner-bg banner-hero"></div>
-        <div class="banner-photo photo-left"></div>
-        <div class="banner-photo photo-right"></div>
-        <div class="banner-grain"></div>
-        <div class="banner-overlay"></div>
-        <div class="section-tab">Home</div>
-        <div class="banner-content reveal-up">
-          <p class="eyebrow">Data Engineer · Full Stack Developer · AWS Specialist</p>
-          <h2 style="font-size: clamp(3rem, 7vw, 6.5rem);">Data Engineer &amp; Software Developer</h2>
-          <p class="lead">
-            I build reliable data pipelines, backend systems, and cloud workflows that turn raw data into business-ready insight.
-          </p>
-          <div class="hero-actions">
-            <a href="#projects" class="btn btn-dark">View Projects</a>
-            <a href="#contact" class="btn btn-light">Let's Talk</a>
+      <section id="home" class="video-hero">
+        <!-- Atmospheric cloud background -->
+        <div class="vh-bg-clouds"></div>
+
+        <!-- Three.js cinematic particle canvas -->
+        <canvas id="cinematicCanvas" class="vh-canvas"></canvas>
+
+        <!-- Two-column layout: content left · video right -->
+        <div class="vh-layout">
+          <!-- Left: content -->
+          <div class="vh-content">
+            <p class="vh-section-label">Home</p>
+            <p class="vh-tagline">Data Engineer · Full Stack Developer · AWS Specialist</p>
+            <h1 class="vh-heading">
+              Data Engineer &amp;<br>Software Developer
+            </h1>
+            <p class="vh-subtitle">
+              I build reliable data pipelines, backend systems, and cloud workflows that turn raw data into business-ready insight.
+            </p>
+            <div class="hero-actions vh-actions">
+              <a href="#projects" class="btn btn-dark">View Projects</a>
+              <a href="#contact" class="btn btn-light">Let's Talk</a>
+            </div>
+            <div class="hero-meta vh-meta">
+              <span>Tempe, AZ</span>
+              <span>MS Software Engineering</span>
+              <span>Open to full-time roles</span>
+            </div>
           </div>
-          <div class="hero-meta">
-            <span>Tempe, AZ</span>
-            <span>MS Software Engineering</span>
-            <span>Open to full-time roles</span>
+
+          <!-- Right: video frame -->
+          <div class="vh-video-frame">
+            <video class="vh-main" id="heroVideo" muted playsinline preload="auto">
+              <source src="Anime-video.mp4" type="video/mp4">
+            </video>
+            <div class="vh-frame-glow"></div>
           </div>
         </div>
+
+        <!-- Glassmorphism video controls -->
+        <div class="vh-controls">
+          <button id="playPauseBtn" class="vh-ctrl-btn" aria-label="Play or pause">
+            <i class="bx bx-pause"></i>
+          </button>
+          <button id="muteBtn" class="vh-ctrl-btn" aria-label="Toggle sound">
+            <i class="bx bx-volume-mute"></i>
+          </button>
+        </div>
+
+        <!-- Sound hint badge -->
+        <div class="vh-sound-badge" id="soundHint">
+          <span class="vh-pulse-dot"></span>
+          Tap for sound
+        </div>
+
+        <!-- Scroll indicator -->
+        <button class="vh-scroll-btn" id="scrollIndicator" aria-label="Scroll to next section">
+          <span class="vh-scroll-track">
+            <span class="vh-scroll-line"></span>
+          </span>
+        </button>
       </section>
 
       <section id="about" class="content-block light-section reveal-up">
@@ -88,7 +141,7 @@
                 <span>Query performance improvement</span>
               </div>
               <div class="stat-card">
-                <strong>3</strong>
+                <strong>2</strong>
                 <span>AWS-focused certifications</span>
               </div>
             </div>
@@ -224,7 +277,7 @@
             <p>Mobile app to schedule and manage medicine reminders with dosage timings and notifications, designed to support better medication adherence and daily health management.</p>
             <div class="project-links">
               <a href="https://github.com/Harshith-123/Medicine-Timer-Android-App" target="_blank" rel="noopener noreferrer"><i class='bx bxl-github'></i> GitHub</a>
-              <a href="https://drive.google.com/file/d/1_ogjzSYIpuS4z-lqT44gIMPmnEBheEvA/view?usp=sharing" target="_blank" rel="noopener noreferrer">📄 Report</a>
+              <a href="https://drive.google.com/file/d/1_ogjzSYIpuS4z-lqT44gIMPmnEBheEvA/view?usp=sharing" target="_blank" rel="noopener noreferrer">📋 Report</a>
             </div>
           </article>
           <article class="project-card">
@@ -233,7 +286,7 @@
             <p>Responsive IELTS learning website built during internship at Sain Informatix, featuring course pages, team details, FAQs, contact sections, registration/login, MCQ assessments, and result tracking.</p>
             <div class="project-links">
               <a href="https://github.com/Harshith-123/Intership-Sain-Informatix" target="_blank" rel="noopener noreferrer"><i class='bx bxl-github'></i> GitHub</a> 
-              <a href="https://drive.google.com/file/d/1WXCAlbE_OogJKNM9l0llVh58hz9tmFlx/view?usp=drive_link" target="_blank" rel="noopener noreferrer">📄 Report</a>
+              <a href="https://drive.google.com/file/d/1WXCAlbE_OogJKNM9l0llVh58hz9tmFlx/view?usp=drive_link" target="_blank" rel="noopener noreferrer">📋 Report</a>
             </div>
           </article>
           <article class="project-card">
@@ -242,7 +295,7 @@
             <p>DBMS mini project managing student registration, room allocation, fee records, and hostel reports using structured database design and MySQL-based data management to reduce manual administration work.</p>
             <div class="project-links">
               <a href="https://github.com/Harshith-123/Hostel-managementsystem" target="_blank" rel="noopener noreferrer"><i class='bx bxl-github'></i> GitHub</a>
-              <a href="https://drive.google.com/file/d/1ukCb7lPBZLigPlZNy7DKMZdXU7hbHnKW/view?usp=sharing" target="_blank" rel="noopener noreferrer">📄 Report</a>
+              <a href="https://drive.google.com/file/d/1ukCb7lPBZLigPlZNy7DKMZdXU7hbHnKW/view?usp=sharing" target="_blank" rel="noopener noreferrer">📋 Report</a>
             </div>
           </article>
           <article class="project-card">
@@ -259,7 +312,7 @@
             <p>Python Tkinter desktop application for managing employee records using CSV file storage, supporting adding, editing, deleting, searching, and displaying employee details through a simple GUI.</p>
             <div class="project-links">
               <a href="https://github.com/Harshith-123/Employee-management-system" target="_blank" rel="noopener noreferrer"><i class='bx bxl-github'></i> GitHub</a>
-              <a href="https://drive.google.com/file/d/1qj0wyJsKvkAiGBrZgCb595K_srf6xKTH/view?usp=sharing" target="_blank" rel="noopener noreferrer">📄 Report</a>
+              <a href="https://drive.google.com/file/d/1qj0wyJsKvkAiGBrZgCb595K_srf6xKTH/view?usp=sharing" target="_blank" rel="noopener noreferrer">📋 Report</a>
             </div>
           </article>
           <article class="project-card">
@@ -268,7 +321,7 @@
             <p>C++ console application managing students, librarians, and book records using file handling, with Admin, Student, and Librarian roles supporting add, search, display, and delete operations stored in text files.</p>
             <div class="project-links">
               <a href="https://github.com/Harshith-123/Library-Management" target="_blank" rel="noopener noreferrer"><i class='bx bxl-github'></i> GitHub</a>
-              <a href="https://drive.google.com/file/d/1ic14Ltxs9CHkK1xhjBrud_txAForp681/view?usp=drive_link" target="_blank" rel="noopener noreferrer">📄 Report</a>
+              <a href="https://drive.google.com/file/d/1ic14Ltxs9CHkK1xhjBrud_txAForp681/view?usp=drive_link" target="_blank" rel="noopener noreferrer">📋 Report</a>
             </div>
           </article>
           <article class="project-card">
@@ -277,7 +330,7 @@
             <p>Android app that reduces study distractions by intelligently filtering notifications during focus sessions using adaptive scoring - delivering urgent alerts immediately and batching low-priority ones, reducing interruptions by 92.95%.</p>
             <div class="project-links">
               <a href="https://github.com/Harshith-123/Focus-Notify-Android-App" target="_blank" rel="noopener noreferrer"><i class='bx bxl-github'></i> GitHub</a>
-              <a href="https://drive.google.com/file/d/1qJLJIMRcu__41-SFHrW4eeXY6BbNf_MZ/view?usp=sharing" target="_blank" rel="noopener noreferrer">📄 Report</a>
+              <a href="https://drive.google.com/file/d/1qJLJIMRcu__41-SFHrW4eeXY6BbNf_MZ/view?usp=sharing" target="_blank" rel="noopener noreferrer">📋 Report</a>
             </div>
           </article>
         </div>
@@ -290,17 +343,12 @@
         <div class="banner-overlay dark"></div>
         <div class="banner-content centered reveal-up">
           <p class="eyebrow light">Experience</p>
-          <h2>Journey &<br />Education</h2>
+          <h2>Work<br />Experience</h2>
         </div>
       </section>
 
       <section class="content-block light-section reveal-up">
         <div class="timeline">
-          <article class="timeline-item">
-            <span>Aug 2024 – May 2026</span>
-            <h3>Master of Science, Software Engineering</h3>
-            <p>Arizona State University · Tempe, AZ</p>
-          </article>
           <article class="timeline-item">
             <span>Jan 2023 – Aug 2024</span>
             <h3>Assistant Software Engineer</h3>
@@ -316,11 +364,72 @@
             <h3>Software Intern</h3>
             <p>Sain Informatix · Bangalore, India</p>
           </article>
+        </div>
+      </section>
+
+      <section id="education" class="section-banner experience-banner">
+        <div class="banner-bg banner-experience"></div>
+        <div class="banner-photo photo-left soft"></div>
+        <div class="banner-grain"></div>
+        <div class="banner-overlay dark"></div>
+        <div class="banner-content centered reveal-up">
+          <p class="eyebrow light">Education</p>
+          <h2>Academic<br />Background</h2>
+        </div>
+      </section>
+
+      <section class="content-block light-section reveal-up">
+        <div class="timeline">
+          <article class="timeline-item">
+            <span>Aug 2024 – May 2026</span>
+            <h3>Master of Science, Software Engineering</h3>
+            <p>Arizona State University · Tempe, AZ</p>
+          </article>
           <article class="timeline-item">
             <span>Jun 2023</span>
-            <h3>BE, Information Science & Engineering</h3>
+            <h3>BE, Information Science &amp; Engineering</h3>
             <p>Vidyavardhaka College of Engineering · Mysuru, India</p>
           </article>
+        </div>
+      </section>
+
+      <section id="certifications" class="section-banner experience-banner">
+        <div class="banner-bg banner-experience"></div>
+        <div class="banner-grain"></div>
+        <div class="banner-overlay dark"></div>
+        <div class="banner-content centered reveal-up">
+          <p class="eyebrow light">Certifications</p>
+          <h2>Licenses &amp;<br />Credentials</h2>
+        </div>
+      </section>
+
+      <section class="content-block light-section reveal-up">
+        <div class="cert-grid">
+          <a href="https://www.mygreatlearning.com/certificate/AAKPFVVU?referrer_code=GLF_QZ_6WMP0I" class="cert-card" target="_blank" rel="noopener noreferrer">
+            <span class="cert-badge"><i class="bx bxs-badge-check"></i></span>
+            <span class="cert-name">Java Programming</span>
+            <span class="cert-arrow"><i class="bx bx-link-external"></i></span>
+          </a>
+          <a href="https://www.coursera.org/account/accomplishments/verify/YD8Z3RLYP7NP" class="cert-card" target="_blank" rel="noopener noreferrer">
+            <span class="cert-badge"><i class="bx bxs-badge-check"></i></span>
+            <span class="cert-name">Programming Fundamentals</span>
+            <span class="cert-arrow"><i class="bx bx-link-external"></i></span>
+          </a>
+          <a href="https://www.coursera.org/account/accomplishments/verify/4IFENVWC8IMV" class="cert-card" target="_blank" rel="noopener noreferrer">
+            <span class="cert-badge"><i class="bx bxs-badge-check"></i></span>
+            <span class="cert-name">AWS S3 Basics</span>
+            <span class="cert-arrow"><i class="bx bx-link-external"></i></span>
+          </a>
+          <a href="https://www.credly.com/badges/5e36a9f9-100f-4740-b6d6-646bb12db12f/public_url" class="cert-card" target="_blank" rel="noopener noreferrer">
+            <span class="cert-badge"><i class="bx bxs-badge-check"></i></span>
+            <span class="cert-name">AWS Certified Data Engineer – Associate</span>
+            <span class="cert-arrow"><i class="bx bx-link-external"></i></span>
+          </a>
+          <a href="https://www.mygreatlearning.com/certificate/SWMNMXFP?referrer_code=GLF_QZ_6WMP0I" class="cert-card" target="_blank" rel="noopener noreferrer">
+            <span class="cert-badge"><i class="bx bxs-badge-check"></i></span>
+            <span class="cert-name">Robotic Process Automation (RPA)</span>
+            <span class="cert-arrow"><i class="bx bx-link-external"></i></span>
+          </a>
         </div>
       </section>
 
@@ -363,6 +472,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="script_final_v2.js"></script>
 </body>
 </html>

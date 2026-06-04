@@ -1,3 +1,233 @@
+/* ============================================================
+   NAVBAR TRANSPARENCY OVER VIDEO HERO
+   ============================================================ */
+const navbar     = document.getElementById('navbar');
+const topStrip   = document.querySelector('.top-strip');
+const videoHero  = document.getElementById('home');
+
+function syncNavStyle() {
+  if (!videoHero || !navbar) return;
+  const below = videoHero.getBoundingClientRect().bottom < 60;
+  navbar.classList.toggle('nav-over-video', !below);
+  if (topStrip) topStrip.classList.toggle('ts-over-video', !below);
+}
+window.addEventListener('scroll', syncNavStyle, { passive: true });
+
+/* ============================================================
+   VIDEO CONTROLS
+   ============================================================ */
+const heroVideo     = document.getElementById('heroVideo');
+const playPauseBtn  = document.getElementById('playPauseBtn');
+const muteBtn       = document.getElementById('muteBtn');
+const soundHint     = document.getElementById('soundHint');
+const scrollIndicator = document.getElementById('scrollIndicator');
+
+if (heroVideo) {
+  let loopCount = 0;
+
+  // Always start muted (browser always allows), then restore desired mute state.
+  // This sidesteps the autoplay-with-audio block on every programmatic play call.
+  const startPlay = (shouldUnmute) => {
+    heroVideo.currentTime = 0;
+    heroVideo.muted = true;
+    heroVideo.play().then(() => {
+      if (shouldUnmute) {
+        heroVideo.muted = false;
+        if (muteBtn) muteBtn.querySelector('i').className = 'bx bx-volume-full';
+      }
+      if (playPauseBtn) playPauseBtn.querySelector('i').className = 'bx bx-pause';
+    }).catch(() => {});
+  };
+
+  const replayWithGap = () => {
+    if (playPauseBtn) playPauseBtn.querySelector('i').className = 'bx bx-play';
+    setTimeout(() => startPlay(loopCount < 2), 2000);
+  };
+
+  heroVideo.addEventListener('ended', () => {
+    loopCount++;
+    if (loopCount === 2) {
+      if (muteBtn) muteBtn.querySelector('i').className = 'bx bx-volume-mute';
+    }
+    replayWithGap();
+  });
+
+  // First start after 2 s
+  setTimeout(() => {
+    heroVideo.playbackRate = 0.9;
+    startPlay(true);
+    if (soundHint && typeof gsap !== 'undefined') {
+      gsap.to(soundHint, { opacity: 0, pointerEvents: 'none', duration: 0.8, ease: 'power2.in', delay: 0.5 });
+    }
+  }, 2000);
+
+  playPauseBtn.addEventListener('click', () => {
+    if (heroVideo.paused) {
+      heroVideo.play();
+      playPauseBtn.querySelector('i').className = 'bx bx-pause';
+    } else {
+      heroVideo.pause();
+      playPauseBtn.querySelector('i').className = 'bx bx-play';
+    }
+  });
+
+  muteBtn.addEventListener('click', () => {
+    heroVideo.muted = !heroVideo.muted;
+    muteBtn.querySelector('i').className = heroVideo.muted ? 'bx bx-volume-mute' : 'bx bx-volume-full';
+    if (!heroVideo.muted && soundHint && typeof gsap !== 'undefined') {
+      gsap.to(soundHint, { opacity: 0, pointerEvents: 'none', duration: 0.5, ease: 'power2.in' });
+    }
+  });
+}
+
+if (scrollIndicator) {
+  scrollIndicator.addEventListener('click', () => {
+    const next = document.getElementById('about');
+    if (next) next.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+}
+
+/* ============================================================
+   GSAP ENTRANCE ANIMATIONS
+   ============================================================ */
+if (typeof gsap !== 'undefined') {
+  gsap.timeline({ defaults: { ease: 'power3.out' } })
+    .from('.vh-section-label', { opacity: 0, y: 10, duration: 0.7 }, 0.2)
+    .from('.vh-tagline',       { opacity: 0, y: 14, duration: 0.8 }, 0.35)
+    .from('.vh-heading',       { opacity: 0, y: 28, duration: 1.0, ease: 'expo.out' }, 0.5)
+    .from('.vh-subtitle',      { opacity: 0, y: 18, duration: 0.85 }, 0.8)
+    .from('.vh-actions',       { opacity: 0, y: 14, duration: 0.8 }, 0.98)
+    .from('.vh-meta',          { opacity: 0, duration: 0.8 }, 1.1)
+    .from('.vh-controls',      { opacity: 0, duration: 0.8 }, 1.15)
+    .from('.vh-sound-badge',   { opacity: 0, duration: 0.8 }, 1.2)
+    .from('.vh-scroll-btn',    { opacity: 0, duration: 0.8 }, 1.25);
+}
+
+/* ============================================================
+   THREE.JS CINEMATIC PARTICLE LAYER
+   ============================================================ */
+(function () {
+  if (typeof THREE === 'undefined') return;
+  const canvas = document.getElementById('cinematicCanvas');
+  if (!canvas) return;
+
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x000000, 0);
+
+  const scene  = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 100);
+  camera.position.z = 5;
+
+  const COUNT = 220;
+  const pos = new Float32Array(COUNT * 3);
+  const col = new Float32Array(COUNT * 3);
+  const sz  = new Float32Array(COUNT);
+  const spd = new Float32Array(COUNT);
+  const ph  = new Float32Array(COUNT);
+
+  const palette = [
+    [1.0, 0.55, 0.22],
+    [1.0, 0.96, 0.88],
+    [1.0, 0.82, 0.38],
+    [1.0, 0.68, 0.38],
+    [0.96, 0.88, 0.72],
+  ];
+
+  for (let i = 0; i < COUNT; i++) {
+    pos[i*3]     = (Math.random() - 0.5) * 16;
+    pos[i*3 + 1] = (Math.random() - 0.5) * 10;
+    pos[i*3 + 2] = (Math.random() - 0.5) * 7;
+    sz[i]  = Math.random() * 0.65 + 0.15;
+    spd[i] = Math.random() * 0.5 + 0.1;
+    ph[i]  = Math.random() * Math.PI * 2;
+    const c = palette[Math.floor(Math.random() * palette.length)];
+    col[i*3]     = c[0];
+    col[i*3 + 1] = c[1];
+    col[i*3 + 2] = c[2];
+  }
+
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  geo.setAttribute('aColor',   new THREE.BufferAttribute(col, 3));
+  geo.setAttribute('aSize',    new THREE.BufferAttribute(sz,  1));
+  geo.setAttribute('aSpeed',   new THREE.BufferAttribute(spd, 1));
+  geo.setAttribute('aPhase',   new THREE.BufferAttribute(ph,  1));
+
+  const mat = new THREE.ShaderMaterial({
+    uniforms: { uTime: { value: 0 } },
+    vertexShader: `
+      attribute vec3  aColor;
+      attribute float aSize;
+      attribute float aSpeed;
+      attribute float aPhase;
+      uniform   float uTime;
+      varying   vec3  vColor;
+      varying   float vAlpha;
+      void main() {
+        vColor = aColor;
+        vAlpha = 0.38 + 0.28 * sin(uTime * aSpeed * 0.8 + aPhase);
+        vec3 p = position;
+        p.y += sin(uTime * aSpeed * 0.38 + aPhase) * 0.22;
+        p.x += cos(uTime * aSpeed * 0.26 + aPhase * 1.3) * 0.14;
+        vec4 mv = modelViewMatrix * vec4(p, 1.0);
+        gl_Position   = projectionMatrix * mv;
+        gl_PointSize  = aSize * 130.0 / (-mv.z);
+      }
+    `,
+    fragmentShader: `
+      varying vec3  vColor;
+      varying float vAlpha;
+      void main() {
+        vec2  uv = gl_PointCoord - 0.5;
+        float d  = length(uv);
+        if (d > 0.5) discard;
+        float a = pow(smoothstep(0.5, 0.0, d), 1.8) * vAlpha * 0.62;
+        gl_FragColor = vec4(vColor, a);
+      }
+    `,
+    transparent: true,
+    blending:    THREE.AdditiveBlending,
+    depthWrite:  false,
+  });
+
+  scene.add(new THREE.Points(geo, mat));
+
+  let mx = 0, my = 0, tx = 0, ty = 0;
+  window.addEventListener('mousemove', e => {
+    mx = (e.clientX / window.innerWidth  - 0.5) * 2;
+    my = (e.clientY / window.innerHeight - 0.5) * 2;
+  }, { passive: true });
+
+  let active = true, rafId;
+  function tick() {
+    if (!active) return;
+    rafId = requestAnimationFrame(tick);
+    mat.uniforms.uTime.value = performance.now() * 0.001;
+    tx += (mx * 0.35 - tx) * 0.035;
+    ty += (-my * 0.22 - ty) * 0.035;
+    camera.position.x = tx;
+    camera.position.y = ty;
+    camera.lookAt(0, 0, 0);
+    renderer.render(scene, camera);
+  }
+  tick();
+
+  if (videoHero) {
+    new IntersectionObserver(entries => {
+      active = entries[0].isIntersecting;
+      if (active && !rafId) tick();
+    }, { threshold: 0 }).observe(videoHero);
+  }
+
+  window.addEventListener('resize', () => {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+  }, { passive: true });
+})();
+
 const menuBtn = document.getElementById('menuBtn');
 const mobilePanel = document.getElementById('mobilePanel');
 
