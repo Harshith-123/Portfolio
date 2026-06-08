@@ -903,7 +903,7 @@ button, input, textarea { font: inherit; }
     overflow: visible;
   }
   .vh-video-frame {
-    height: min(55vw, 380px);
+    height: min(78vw, 500px);
     max-width: 100%;
     order: -1;
     -webkit-mask-image: radial-gradient(ellipse 94% 88% at 50% 50%, black 25%, rgba(0,0,0,0.55) 58%, transparent 100%);
@@ -1257,7 +1257,7 @@ body {
   }
 
   .vh-video-frame {
-    height: min(52vw, 240px);
+    height: min(78vw, 420px);
     max-width: 100%;
     order: -1;
     -webkit-mask-image: radial-gradient(ellipse 96% 92% at 50% 50%, black 30%, rgba(0,0,0,0.6) 62%, transparent 100%);

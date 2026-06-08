@@ -23,14 +23,16 @@ const soundHint     = document.getElementById('soundHint');
 const scrollIndicator = document.getElementById('scrollIndicator');
 
 if (heroVideo) {
-  // autoplay muted in HTML grants browser permission; pause immediately
-  // so the video only starts after the 2 s timer fires.
-  heroVideo.pause();
+  const isMobile = window.matchMedia('(max-width: 900px)').matches;
 
   let loopCount = 0;
+  let userInteracted = false;
 
-  // Always start muted (browser always allows), then restore desired mute state.
-  // This sidesteps the autoplay-with-audio block on every programmatic play call.
+  // Track any user gesture so we know unmute is safe
+  const markInteracted = () => { userInteracted = true; };
+  document.addEventListener('touchstart', markInteracted, { once: true, passive: true });
+  document.addEventListener('click', markInteracted, { once: true });
+
   const startPlay = (shouldUnmute) => {
     heroVideo.currentTime = 0;
     heroVideo.muted = true;
@@ -38,6 +40,9 @@ if (heroVideo) {
       if (shouldUnmute) {
         heroVideo.muted = false;
         if (muteBtn) muteBtn.querySelector('i').className = 'bx bx-volume-full';
+      } else {
+        heroVideo.muted = true;
+        if (muteBtn) muteBtn.querySelector('i').className = 'bx bx-volume-mute';
       }
       if (playPauseBtn) playPauseBtn.querySelector('i').className = 'bx bx-pause';
     }).catch(() => {});
@@ -50,21 +55,30 @@ if (heroVideo) {
 
   heroVideo.addEventListener('ended', () => {
     loopCount++;
-    if (loopCount === 2) {
-      if (muteBtn) muteBtn.querySelector('i').className = 'bx bx-volume-mute';
-    }
     replayWithGap();
   });
 
-  // After 2 s: start playing. autoplay muted already granted browser permission,
-  // so play() here is always allowed even on iOS/Android.
-  setTimeout(() => {
+  if (isMobile) {
+    // Mobile: autoplay muted, then unmute via the mute button tap (first user gesture).
+    // On ended cycle 1 & 2 replay with sound; after cycle 2 mute permanently.
     heroVideo.playbackRate = 0.9;
-    startPlay(true);
-    if (soundHint && typeof gsap !== 'undefined') {
-      gsap.to(soundHint, { opacity: 0, pointerEvents: 'none', duration: 0.8, ease: 'power2.in' });
-    }
-  }, 2000);
+    heroVideo.muted = true;
+    heroVideo.play().then(() => {
+      if (playPauseBtn) playPauseBtn.querySelector('i').className = 'bx bx-pause';
+    }).catch(() => {});
+    // Show sound hint so user knows to tap for audio
+    if (muteBtn) muteBtn.querySelector('i').className = 'bx bx-volume-mute';
+  } else {
+    // Desktop: pause then start after 2 s with audio
+    heroVideo.pause();
+    setTimeout(() => {
+      heroVideo.playbackRate = 0.9;
+      startPlay(true);
+      if (soundHint && typeof gsap !== 'undefined') {
+        gsap.to(soundHint, { opacity: 0, pointerEvents: 'none', duration: 0.8, ease: 'power2.in' });
+      }
+    }, 2000);
+  }
 
   playPauseBtn.addEventListener('click', () => {
     if (heroVideo.paused) {
@@ -79,8 +93,11 @@ if (heroVideo) {
   muteBtn.addEventListener('click', () => {
     heroVideo.muted = !heroVideo.muted;
     muteBtn.querySelector('i').className = heroVideo.muted ? 'bx bx-volume-mute' : 'bx bx-volume-full';
-    if (!heroVideo.muted && soundHint && typeof gsap !== 'undefined') {
-      gsap.to(soundHint, { opacity: 0, pointerEvents: 'none', duration: 0.5, ease: 'power2.in' });
+    if (!heroVideo.muted) {
+      userInteracted = true;
+      if (soundHint && typeof gsap !== 'undefined') {
+        gsap.to(soundHint, { opacity: 0, pointerEvents: 'none', duration: 0.5, ease: 'power2.in' });
+      }
     }
   });
 }
