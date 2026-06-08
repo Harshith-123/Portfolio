@@ -23,6 +23,10 @@ const soundHint     = document.getElementById('soundHint');
 const scrollIndicator = document.getElementById('scrollIndicator');
 
 if (heroVideo) {
+  // autoplay muted in HTML grants browser permission; pause immediately
+  // so the video only starts after the 2 s timer fires.
+  heroVideo.pause();
+
   let loopCount = 0;
 
   // Always start muted (browser always allows), then restore desired mute state.
@@ -52,12 +56,13 @@ if (heroVideo) {
     replayWithGap();
   });
 
-  // First start after 2 s
+  // After 2 s: start playing. autoplay muted already granted browser permission,
+  // so play() here is always allowed even on iOS/Android.
   setTimeout(() => {
     heroVideo.playbackRate = 0.9;
     startPlay(true);
     if (soundHint && typeof gsap !== 'undefined') {
-      gsap.to(soundHint, { opacity: 0, pointerEvents: 'none', duration: 0.8, ease: 'power2.in', delay: 0.5 });
+      gsap.to(soundHint, { opacity: 0, pointerEvents: 'none', duration: 0.8, ease: 'power2.in' });
     }
   }, 2000);
 

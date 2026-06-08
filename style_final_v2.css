@@ -1228,3 +1228,115 @@ body {
   .vh-content { padding: 0; }
   .cert-grid { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+   PHONE LAYOUT — comprehensive fixes for screens ≤ 768px
+   ============================================================ */
+@media (max-width: 768px) {
+
+  /* --- Hero section --- */
+  .video-hero {
+    height: auto;
+    min-height: 100svh; /* safe-area-aware on iOS */
+  }
+
+  .vh-layout {
+    grid-template-columns: 1fr;
+    padding: 78px 20px 44px;
+    gap: 14px;
+    min-height: unset;
+    align-content: start;
+  }
+
+  .vh-video-frame {
+    height: min(48vw, 220px);
+    max-width: 100%;
+    order: -1;
+  }
+
+  .vh-section-label { margin-bottom: 6px; }
+
+  .vh-tagline {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    margin-bottom: 12px;
+  }
+
+  .vh-heading {
+    font-size: clamp(1.65rem, 6.5vw, 2.2rem);
+    line-height: 1.08;
+    margin-bottom: 12px;
+  }
+
+  .vh-subtitle {
+    font-size: 0.9rem;
+    line-height: 1.68;
+    margin-bottom: 20px;
+  }
+
+  .vh-actions { gap: 10px; margin-top: 0; }
+  .vh-actions .btn { padding: 12px 20px; font-size: 0.85rem; }
+
+  .vh-meta {
+    margin-top: 14px;
+    gap: 6px;
+  }
+  .vh-meta span {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+  }
+
+  .vh-controls { bottom: 14px; right: 14px; gap: 7px; }
+  .vh-ctrl-btn { width: 36px; height: 36px; font-size: 1rem; }
+
+  /* --- Section titles --- */
+  .section-title,
+  .content-block .section-title,
+  .content-block .section-title.dark {
+    font-size: clamp(1.6rem, 6vw, 2.2rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  /* --- Banner headings --- */
+  .banner-content h1,
+  .banner-content h2 {
+    font-size: clamp(2rem, 9vw, 3rem);
+  }
+  .banner-content {
+    padding: 90px 24px 80px;
+  }
+
+  /* --- Content blocks --- */
+  .content-block { padding: 48px 18px; }
+
+  /* --- About stat cards — horizontal scroll row on mobile --- */
+  .stat-row {
+    grid-template-columns: repeat(3, minmax(130px, 1fr));
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .stat-card { min-width: 120px; }
+
+  /* --- Timeline --- */
+  .timeline-item { padding: 16px 18px; }
+  .timeline-item h3 { font-size: 0.95rem; }
+  .timeline-item span { font-size: 0.8rem; }
+  .timeline-item p { font-size: 0.88rem; }
+
+  /* --- Project cards --- */
+  .project-card { padding: 22px 18px; }
+  .project-card h3 { font-size: 1rem; }
+
+  /* --- Skill columns --- */
+  .skill-column { padding: 18px; }
+  .skill-column li { font-size: 0.9rem; }
+
+  /* --- Cert cards --- */
+  .cert-card { padding: 16px 16px; }
+  .cert-name { font-size: 0.88rem; }
+
+  /* --- Contact form --- */
+  .contact-copy h3 { font-size: 1.1rem; }
+}
