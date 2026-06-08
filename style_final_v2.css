@@ -1242,16 +1242,19 @@ body {
 
   .vh-layout {
     grid-template-columns: 1fr;
-    padding: 78px 20px 44px;
-    gap: 14px;
+    padding: 90px 20px 40px;
+    gap: 20px;
     min-height: unset;
     align-content: start;
   }
 
   .vh-video-frame {
-    height: min(48vw, 220px);
+    height: min(56vw, 280px);
     max-width: 100%;
     order: -1;
+    /* Simple centered oval — no clipping on small screens */
+    -webkit-mask-image: radial-gradient(ellipse 96% 92% at 50% 50%, black 30%, rgba(0,0,0,0.6) 62%, transparent 100%);
+    mask-image: radial-gradient(ellipse 96% 92% at 50% 50%, black 30%, rgba(0,0,0,0.6) 62%, transparent 100%);
   }
 
   .vh-section-label { margin-bottom: 6px; }
