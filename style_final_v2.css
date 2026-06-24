@@ -432,30 +432,80 @@ button, input, textarea { font: inherit; }
 
 .project-section { background: #ffffff; }
 .project-grid {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 22px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
   justify-items: center;
+  perspective: 1400px;       /* 3D viewing depth for the cards */
 }
 .project-card {
+  position: relative;
   width: 100%;
-  padding: 30px;
-  border-radius: 28px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 26px;
   background: rgba(255,255,255,0.7);
   border: 1px solid rgba(24,20,19,0.08);
   box-shadow: 0 18px 40px rgba(0,0,0,0.05);
   backdrop-filter: blur(10px);
-  transition: transform 0.28s ease, box-shadow 0.28s ease;
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1),
+              box-shadow 0.4s ease, border-color 0.4s ease;
+  will-change: transform;
 }
 .project-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 26px 50px rgba(0,0,0,0.08);
 }
+
+/* Cover image — full-bleed header with parallax depth */
+.project-media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  transform: translateZ(30px);
+  transform-style: preserve-3d;
+}
+.project-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1.04);
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.project-card:hover .project-media img { transform: scale(1.1); }
+
+/* Moving glare sweep driven by the pointer */
+.project-shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, 0%),
+    rgba(255,255,255,0.30), rgba(255,255,255,0) 55%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  mix-blend-mode: screen;
+}
+.project-card:hover .project-shine { opacity: 1; }
+
+.project-body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 26px 28px 28px;
+  transform: translateZ(45px);
+}
 .project-kicker {
   display: inline-block;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   color: var(--accent-deep);
   text-transform: uppercase;
   letter-spacing: 0.16em;
@@ -465,10 +515,12 @@ button, input, textarea { font: inherit; }
 .project-card h3 {
   font-family: var(--font-serif);
   font-size: 2rem;
-  line-height: 1;
-  margin-bottom: 14px;
+  line-height: 1.02;
+  margin-bottom: 12px;
   font-weight: 600;
 }
+.project-card p { color: var(--muted); }
+.project-body .project-links { margin-top: auto; padding-top: 18px; }
 
 .timeline {
   max-width: 1000px;
@@ -1069,6 +1121,21 @@ body {
 .project-card h3 { color: rgba(255, 255, 255, 0.95); }
 .project-card p  { color: var(--muted); font-weight: 400; }
 
+/* Cover image framing on dark cards */
+.project-media {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.project-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(18,12,11,0) 55%, rgba(18,12,11,0.55) 100%);
+}
+.project-card:hover {
+  border-color: rgba(232, 146, 90, 0.28);
+}
+
 /* Project links — pill style */
 .project-links {
   display: flex;
@@ -1347,8 +1414,12 @@ body {
   .timeline-item p { font-size: 0.88rem; }
 
   /* --- Project cards --- */
-  .project-card { padding: 22px 18px; }
-  .project-card h3 { font-size: 1rem; }
+  .project-body { padding: 20px 18px 22px; }
+  .project-card h3 { font-size: 1.5rem; }
+  .project-grid { perspective: none; }
+  .project-card,
+  .project-media,
+  .project-body { transform: none !important; }
 
   /* --- Skill columns — force single column on phones --- */
   .skills-layout {
