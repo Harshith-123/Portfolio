@@ -267,17 +267,35 @@ window.addEventListener('click', (event) => {
   }
 });
 
-const revealItems = document.querySelectorAll('.reveal-up');
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('is-visible');
-      observer.unobserve(entry.target);
+/* Reveal-on-scroll using getBoundingClientRect.
+   NOTE: an IntersectionObserver with a percentage threshold fails for very
+   tall sections — e.g. the single-column Projects grid on mobile is ~6000px,
+   so its visible ratio never reaches 12% on a ~700px phone viewport and the
+   whole section stays at opacity:0 ("can't see the projects"). A rect check
+   on the element's top edge is immune to element height. */
+const revealItems = Array.from(document.querySelectorAll('.reveal-up'));
+let revealTicking = false;
+function revealOnScroll() {
+  revealTicking = false;
+  const trigger = window.innerHeight * 0.92;
+  for (let i = revealItems.length - 1; i >= 0; i--) {
+    const item = revealItems[i];
+    const rect = item.getBoundingClientRect();
+    if (rect.top < trigger && rect.bottom > 0) {
+      item.classList.add('is-visible');
+      revealItems.splice(i, 1);     // reveal once, then stop tracking
     }
-  });
-}, { threshold: 0.12 });
-
-revealItems.forEach((item) => observer.observe(item));
+  }
+}
+function queueReveal() {
+  if (revealTicking) return;
+  revealTicking = true;
+  requestAnimationFrame(revealOnScroll);
+}
+window.addEventListener('scroll', queueReveal, { passive: true });
+window.addEventListener('resize', queueReveal, { passive: true });
+window.addEventListener('load', revealOnScroll);
+revealOnScroll();
 
 /* ============================================================
    3D INTERACTIVE TILT — PROJECT CARDS
