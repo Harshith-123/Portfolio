@@ -19,11 +19,9 @@
 </head>
 <body>
   <div class="page-shell">
-    <!-- Fixed looping video background — visible through all transparent sections -->
+    <!-- Fixed 3D DNA-helix background — visible through all transparent sections -->
     <div class="page-bg" aria-hidden="true">
-      <video class="pb-video" autoplay muted loop playsinline preload="auto">
-        <source src="Background-video.mp4" type="video/mp4">
-      </video>
+      <canvas id="dnaBgCanvas" class="pb-canvas"></canvas>
       <div class="pb-scrim"></div>
     </div>
 
